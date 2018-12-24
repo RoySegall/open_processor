@@ -5,7 +5,8 @@ This class handle the translation from english to hebrew.
 """
 
 import json
-import system
+import sys
+import os
 
 
 class i18n(object):
@@ -20,8 +21,20 @@ class i18n(object):
 
     def __init__(self):
         """Constructing."""
-        self.fields = {}
-        self.sheets = {}
+        self.fields = self.__read_json_file('fields.json')
+        self.sheets = self.__read_json_file('sheets.json')
+
+    def __read_json_file(self, file):
+        """
+        Reding a file content.
+
+        :param file:
+            The name of the file we need to read.
+        """
+        file = open(os.path.dirname(os.path.abspath(__file__))
+                    + "/assets/" + file, "r")
+
+        return json.load(file)
 
     def set_fields(self, fields):
         """
@@ -33,7 +46,7 @@ class i18n(object):
         :param fields:
             The new fields to set.
         """
-        pass
+        self.fields = fields
 
     def translate_field(self, field):
         """
@@ -42,7 +55,10 @@ class i18n(object):
         :param field:
             The field name for translation.
         """
-        pass
+        if field in self.fields.keys():
+            return self.fields[field]
+
+        return None
 
     def set_sheets(self, sheets):
         """
@@ -63,4 +79,7 @@ class i18n(object):
         :param field:
             The field name for translation.
         """
-        pass
+        if sheet in self.sheets.keys():
+            return self.sheets[sheet]
+
+        return None
